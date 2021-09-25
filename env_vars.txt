@@ -1,0 +1,5 @@
+#make it .env and do not move it from this directory
+DB_CONNECTION="mongodb+srv://admin:7xDrESBkRlyskzl9@cluster0.cp7z7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+FLASK_APP=chatbot/app.py
+FLASK_DEBUG=1
+
