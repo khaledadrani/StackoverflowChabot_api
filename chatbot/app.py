@@ -18,6 +18,9 @@ from pymongo import MongoClient
 from bson import json_util
 import pymongo
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 
 def connect_db(connection_string,verbose=False):
   try:
@@ -80,9 +83,14 @@ def define_response(text):
       return {"status":"Not OK" ,
             "Body":"It seems there are no good answers for your question."}
 
-nltk.download('punkt', download_dir='./chatbot/nltk_data')
-nltk.download('wordnet', download_dir='./chatbot/nltk_data')
 nltk.data.path.append('./chatbot/nltk_data')
+
+try:
+  nltk.download('punkt', download_dir='./chatbot/nltk_data')
+  nltk.download('wordnet', download_dir='./chatbot/nltk_data')
+except:
+  print("Internet connection issue")
+
 
 app = Flask(__name__)
 CORS(app)
@@ -97,9 +105,14 @@ db = connect_db(connection_string=connection_string ,verbose=False)
 os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 
 
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["200 per day", "120 per hour"]
+)
+
 
 model = load_model('chatbot/chatbot_model.h5')
-
 intents = json.loads(open('chatbot/intents.json').read())
 words = pickle.load(open('chatbot/words.pkl','rb'))
 classes = pickle.load(open('chatbot/classes.pkl','rb'))
@@ -163,6 +176,7 @@ def parse_json(data):
     return json.loads(json_util.dumps(data))
 
 @app.route('/response', methods=['POST'])
+@limiter.limit("120 per hour")
 def chatbot_response():
     data = request.json
     text = data["text"]

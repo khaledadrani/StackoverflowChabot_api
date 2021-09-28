@@ -4,4 +4,5 @@
 py_env
 .vscode
 /chatbot/__pycache__
-/chatbot/nltk_data
+/chatbot/nltk_data/*
+env_vars.txt
