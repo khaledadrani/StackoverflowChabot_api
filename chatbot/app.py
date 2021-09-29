@@ -175,6 +175,17 @@ def getResponse(sentence, ints, intents_json):
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
+@app.route('/', methods=['GET','POST'])
+@limiter.limit("120 per hour")
+def home():
+    # data = request.json
+    # text = data["text"]
+    # ints = predict_class(text, model)
+    # res = getResponse(text, ints, intents)
+    # response = parse_json(res) #jsonify(res)
+    # #response.headers.add('Access-Control-Allow-Origin', '*')
+    return "<p> The app should be working </p>"
+
 @app.route('/response', methods=['POST'])
 @limiter.limit("120 per hour")
 def chatbot_response():
