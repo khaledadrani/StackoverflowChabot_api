@@ -1,1 +1,1 @@
-web: gunicorn --bind 0.0.0.0:$PORT --chdir chatbot app:app
+web: gunicorn --chdir chatbot app:app
