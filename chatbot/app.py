@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import nltk
 from nltk.stem import WordNetLemmatizer
-lemmatizer = WordNetLemmatizer()
+
 
 import pickle
 import numpy as np
@@ -20,6 +20,8 @@ import pymongo
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+
+from config import Config, ProductionConfig
 
 
 def connect_db(connection_string,verbose=False):
@@ -83,41 +85,53 @@ def define_response(text):
       return {"status":"Not OK" ,
             "Body":"It seems there are no good answers for your question."}
 
-nltk.data.path.append('./chatbot/nltk_data')
+            
+def download_nltk(yes=True):
+  if yes:
+    nltk.data.path.append('./chatbot/nltk_data')
 
-try:
-  nltk.download('punkt', download_dir='./chatbot/nltk_data')
-  nltk.download('wordnet', download_dir='./chatbot/nltk_data')
-except:
-  print("Internet connection issue")
+    try:
+      nltk.download('punkt', download_dir='./chatbot/nltk_data')
+      nltk.download('wordnet', download_dir='./chatbot/nltk_data')
+    except:
+      print("Internet connection issue")
 
 
-app = Flask(__name__)
-CORS(app)
 
 
+
+download_nltk(yes=True)
 
 load_dotenv(".env")
 connection_string = os.environ.get("DB_CONNECTION")
 
 db = connect_db(connection_string=connection_string ,verbose=False)
 
-os.environ['CUDA_VISIBLE_DEVICES'] = "0"
+ENV = os.environ.get("ENV")
 
+if ENV == 'production':
+  config = ProductionConfig()
+elif ENV == 'development':
+  config = Config()
+
+
+
+lemmatizer = WordNetLemmatizer()
+
+
+model = load_model(config.MODEL_PATH + 'chatbot_model.h5')
+intents = json.loads(open(config.MODEL_PATH + 'intents.json').read())
+words = pickle.load(open(config.MODEL_PATH +'words.pkl','rb'))
+classes = pickle.load(open(config.MODEL_PATH +'classes.pkl','rb'))
+
+app = Flask(__name__)
+CORS(app)
 
 limiter = Limiter(
-    app,
-    key_func=get_remote_address,
-    default_limits=["200 per day", "120 per hour"]
+  app,
+  key_func=get_remote_address,
+  default_limits=["200 per day", "120 per hour"]
 )
-
-
-model = load_model('chatbot/chatbot_model.h5')
-intents = json.loads(open('chatbot/intents.json').read())
-words = pickle.load(open('chatbot/words.pkl','rb'))
-classes = pickle.load(open('chatbot/classes.pkl','rb'))
-
-
 
 def clean_up_sentence(sentence):
     # tokenize the pattern - split words into array
@@ -198,4 +212,5 @@ def chatbot_response():
     return response
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  
+  app.run(debug=config.DEBUG)
