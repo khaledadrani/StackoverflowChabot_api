@@ -117,9 +117,9 @@ db = connect_db(connection_string=connection_string ,verbose=False)
 
 ENV = os.environ.get("ENV")
 
-if ENV == 'production':
-  config = ProductionConfig()
-elif ENV == 'development':
+config = ProductionConfig()
+
+if ENV == 'development':
   config = Config()
 
 download_nltk(config.DEBUG)
