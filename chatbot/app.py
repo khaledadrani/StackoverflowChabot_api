@@ -33,7 +33,7 @@ class Config(object):
 class ProductionConfig(Config):
     DEVELOPMENT = False
     DEBUG = False
-    MODEL_PATH = "app/chatbot"
+    MODEL_PATH = "app/chatbot/"
 
 
 def connect_db(connection_string,verbose=False):
