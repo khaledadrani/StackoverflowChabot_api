@@ -21,7 +21,19 @@ import pymongo
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from config import Config, ProductionConfig
+class Config(object):
+    DEBUG = True
+    DEVELOPMENT = True
+    MODEL_PATH = "./chatbot/"
+    # SECRET_KEY = 'do-i-really-need-this'
+    # FLASK_HTPASSWD_PATH = '/secret/.htpasswd'
+    # FLASK_SECRET = SECRET_KEY
+    #DB_HOST = 'database' # a docker link
+
+class ProductionConfig(Config):
+    DEVELOPMENT = False
+    DEBUG = False
+    MODEL_PATH = "app/chatbot"
 
 
 def connect_db(connection_string,verbose=False):
@@ -86,8 +98,8 @@ def define_response(text):
             "Body":"It seems there are no good answers for your question."}
 
             
-def download_nltk(yes=True):
-  if yes:
+def download_nltk(DEBUG=True):
+  if DEBUG:
     nltk.data.path.append('./chatbot/nltk_data')
 
     try:
@@ -97,10 +109,6 @@ def download_nltk(yes=True):
       print("Internet connection issue")
 
 
-
-
-
-download_nltk(yes=True)
 
 load_dotenv(".env")
 connection_string = os.environ.get("DB_CONNECTION")
@@ -114,7 +122,7 @@ if ENV == 'production':
 elif ENV == 'development':
   config = Config()
 
-
+download_nltk(config.DEBUG)
 
 lemmatizer = WordNetLemmatizer()
 
