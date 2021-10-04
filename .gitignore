@@ -6,3 +6,4 @@ py_env
 /chatbot/__pycache__
 /chatbot/nltk_data/*
 env_vars.txt
+__pycache__/

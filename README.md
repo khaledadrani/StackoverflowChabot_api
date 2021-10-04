@@ -2,11 +2,15 @@
 
 The documentation is still in progress.
 
+
+
 # requirements
 
     python-version==3.8.10
 
     pip-version==20.2.4
+
+    \# we recommend creating a virtual environment
 
     pip install flask nltk flask_cors python-dotenv pymongo  flask_limiter keras tensorflow-cpu==2.5.0 numpy==1.19.2 six==1.15.0
 
