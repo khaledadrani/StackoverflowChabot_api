@@ -202,7 +202,8 @@ def parse_json(data):
 @app.route('/', methods=['GET'])
 @limiter.limit("60 per hour")
 def home():
-  url = "https://github.com/khaledadrani/StackoverflowChabot_api/tree/master/chatbot"
+  url_string = "https://github.com/khaledadrani/StackoverflowChabot_api/tree/master/chatbot"
+  url = f'<a href={url_string}><span>the API Github repository</span></a>'
   string = "<p> For more information about the api, visit "+url+" </p>"
   return "<h1> The api is working, yaay!</h1>" + string
 
