@@ -2,7 +2,7 @@
 
 # Description
 
-<p align="center">This project is a prototype of a chatbot that will quickly find the best answer for any programming question you have through the dataset of Stackoverflow. 
+<p align="center">This project is a prototype of a chatbot that will quickly find the best answer for any programming question you have through the dataset of Stackoverflow. This repository is only the Backend for the project.
 </p>
 
 # Live Demo
@@ -16,7 +16,6 @@ Note: If there is an application error, it musb that the free dyno for the curre
 
 - Python
 - Keras
-- Tensorflow
 - Flask
 - MongoDB
 
@@ -72,7 +71,7 @@ or
 
 # Contributors:
 
-- Khaled Adrani: https://github.com/khaledadrani
-- Oussema Guedri: https://github.com/guedriOussema
+- Khaled Adrani: https://github.com/khaledadrani => Database and API
+- Oussema Guedri: https://github.com/guedriOussema => Chatbot model and FrontEnd
 
 
