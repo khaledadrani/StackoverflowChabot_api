@@ -204,7 +204,7 @@ def parse_json(data):
 def home():
   url_string = "https://github.com/khaledadrani/StackoverflowChabot_api/tree/master/chatbot"
   url = f'<a href={url_string}><span>the API Github repository</span></a>'
-  string = "<p> For more information about the api, visit "+url+" </p>"
+  string = "<p> For more information about the api, visit "+url+" for source code</p>"
   return "<h1> The api is working, yaay!</h1>" + string
 
 @app.route('/response', methods=['POST','GET'])
