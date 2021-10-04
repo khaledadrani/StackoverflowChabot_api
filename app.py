@@ -199,27 +199,26 @@ def getResponse(sentence, ints, intents_json):
 def parse_json(data):
     return json.loads(json_util.dumps(data))
 
-@app.route('/', methods=['GET','POST'])
-@limiter.limit("120 per hour")
+@app.route('/', methods=['GET'])
+@limiter.limit("60 per hour")
 def home():
-    # data = request.json
-    # text = data["text"]
-    # ints = predict_class(text, model)
-    # res = getResponse(text, ints, intents)
-    # response = parse_json(res) #jsonify(res)
-    # #response.headers.add('Access-Control-Allow-Origin', '*')
-    return "<p> The app should be working </p>"
+  url = "https://github.com/khaledadrani/StackoverflowChabot_api/tree/master/chatbot"
+  string = "<p> For more information about the api, visit "+url+" </p>"
+  return "<h1> The api is working, yaay!</h1>" + string
 
-@app.route('/response', methods=['POST'])
-@limiter.limit("120 per hour")
+@app.route('/response', methods=['POST','GET'])
+@limiter.limit("60 per hour")
 def chatbot_response():
-    data = request.json
-    text = data["text"]
-    ints = predict_class(text, model)
-    res = getResponse(text, ints, intents)
-    response = parse_json(res) #jsonify(res)
-    #response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    if request.method == 'POST':
+      data = request.json
+      text = data["text"]
+      ints = predict_class(text, model)
+      res = getResponse(text, ints, intents)
+      response = parse_json(res) #jsonify(res)
+      #response.headers.add('Access-Control-Allow-Origin', '*')
+      return response
+    elif request.method == 'GET':
+      return '<span> This route is for the chatbot responses </span>'
 
 if __name__ == "__main__":
   

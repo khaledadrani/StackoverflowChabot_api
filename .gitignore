@@ -7,3 +7,4 @@ py_env
 /chatbot/nltk_data/*
 env_vars.txt
 __pycache__/
+chatbot/.ipynb_checkpoints
